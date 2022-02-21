@@ -1,25 +1,45 @@
-import logo from './logo.svg';
 import './App.css';
+import MainLayout from './layout/MainLayout';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { CartProvider } from './components/CartContext/CartContext';
+import Home from './components/Home/Home';
+import Error from './components/Error/Error';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<CartProvider>
+			<Router>
+				<Switch>
+					<Route exact path='/'>
+						<MainLayout>
+							<Home />
+						</MainLayout>
+					</Route>
+					<Route exact path='/products'>
+						<MainLayout>{/* <ItemList /> */}</MainLayout>
+					</Route>
+					<Route exact path='/recipes'>
+						<MainLayout>{/* <FinishPurchase /> */}</MainLayout>
+					</Route>
+					<Route exact path='/supplier'>
+						<MainLayout>{/* <NewSale /> */}</MainLayout>
+					</Route>
+					<Route exact path='/order'>
+						<MainLayout>{/* <Cart /> */}</MainLayout>
+					</Route>
+					<Route exact path='/order/uid=:id'>
+						<MainLayout>{/* <ItemDetails /> */}</MainLayout>
+					</Route>
+					<Route exact path='/stock'>
+						<MainLayout>{/* <ItemList /> */}</MainLayout>
+					</Route>
+					<Route path='*'>
+						<Error />
+					</Route>
+				</Switch>
+			</Router>
+		</CartProvider>
+	);
 }
 
 export default App;
