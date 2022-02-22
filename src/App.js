@@ -4,6 +4,7 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import { CartProvider } from './components/CartContext/CartContext';
 import Home from './components/Home/Home';
 import Error from './components/Error/Error';
+import ProductList from './components/ProductsList/ProductsList';
 
 function App() {
 	return (
@@ -16,7 +17,9 @@ function App() {
 						</MainLayout>
 					</Route>
 					<Route exact path='/products'>
-						<MainLayout>{/* <ItemList /> */}</MainLayout>
+						<MainLayout>
+							<ProductList />
+						</MainLayout>
 					</Route>
 					<Route exact path='/recipes'>
 						<MainLayout>{/* <FinishPurchase /> */}</MainLayout>

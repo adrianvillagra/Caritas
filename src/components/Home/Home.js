@@ -19,7 +19,7 @@ const Home = () => {
 
 	return (
 		<div>
-			<Carousel autoplay>
+			{/* <Carousel autoplay>
 				{carouselData.map((item, index) => {
 					return (
 						<div className='container' key={index}>
@@ -33,7 +33,7 @@ const Home = () => {
 						</div>
 					);
 				})}
-			</Carousel>
+			</Carousel> */}
 			<Row gutter={[24, 24]} style={{ marginTop: '50px' }}>
 				<Col span={18} push={6}>
 					<div className='row' key={1}>

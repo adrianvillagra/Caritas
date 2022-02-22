@@ -21,7 +21,7 @@ const MainLayout = ({ children }) => {
 					>
 						{children}
 					</div>
-					<Footer style={{ textAlign: 'center' }}>AV Furniture ©2021</Footer>
+					<Footer style={{ textAlign: 'center' }}>AV©2022</Footer>
 				</Content>
 			</Layout>
 		</Layout>
