@@ -5,11 +5,9 @@ import {
 	Divider,
 	Form,
 	Input,
-	Layout,
 	Select,
 	Spin,
 	Drawer,
-	Space,
 	Typography,
 } from 'antd';
 import { func, bool, object } from 'prop-types';
@@ -22,7 +20,7 @@ import { ErrorContext } from '../../providers/ErrorProvider';
 import TypesService from '../../services/TypesService';
 import MesuaresService from '../../services/MesuaresService';
 
-const Product = (onClose, visible) => {
+const Product = ({ onClose, visible, product }) => {
 	const [productName, setProductName] = useState('');
 	const [types, setTypes] = useState([]);
 	const [mesuares, setMesuares] = useState([]);
@@ -35,14 +33,8 @@ const Product = (onClose, visible) => {
 	const typesService = new TypesService();
 	const mesuaresService = new MesuaresService();
 	const productsService = new ProductsService();
-	const { Content } = Layout;
 	const { Option } = Select;
 	const { Text } = Typography;
-	const routes = [
-		{ path: '/', breadcrumbName: 'Admin' },
-		{ path: '/products', breadcrumbName: 'Products' },
-		{ path: '', breadcrumbName: productName },
-	];
 
 	const backToProducts = () => history.replace('/products');
 
@@ -80,16 +72,16 @@ const Product = (onClose, visible) => {
 
 		productsService
 			.get(id)
-			.then((data) => {
-				setProductName(data.name);
+			.then((result) => {
+				setProductName(result.name);
 				form.setFieldsValue({
-					name: data.name,
-					description: data.description,
-					globalPartner: data.global_type,
-					mesuare: data.mesuare,
+					name: result.name,
+					type: result.type_id,
+					mesuare: result.mesuare_id,
 				});
 			})
 			.catch((err) => {
+				console.error(err.toString());
 				// setError(err.toString());
 			})
 			.finally(() => {
@@ -105,9 +97,13 @@ const Product = (onClose, visible) => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setMesuares(result);
+					form.setFieldsValue({
+						mesuare: result[0].id,
+					});
 				}
 			})
 			.catch((err) => {
+				console.error(err.toString());
 				// setError(err.toString());
 			})
 			.finally(() => {
@@ -123,9 +119,13 @@ const Product = (onClose, visible) => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setTypes(result);
+					form.setFieldsValue({
+						type: result[0].id,
+					});
 				}
 			})
 			.catch((err) => {
+				console.error(err.toString());
 				// setError(err.toString());
 			})
 			.finally(() => {
@@ -143,15 +143,15 @@ const Product = (onClose, visible) => {
 	};
 
 	const handleCloseProduct = () => {
-		console.log('entro al handleCloseProduct ');
 		onClose();
 	};
 
 	useEffect(() => {
-		// getProduct(id);
-		console.log('isVisible:', visible);
 		getMesuares();
 		getTypes();
+		if (product.length !== 0) {
+			getProduct(product.id);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -163,20 +163,12 @@ const Product = (onClose, visible) => {
 				onClose={handleCloseProduct}
 				visible={visible}
 				bodyStyle={{ paddingBottom: 80 }}
-				extra={
-					<Space>
-						<Button onClick={handleCloseProduct}>Cancel</Button>
-						<Button onClick={handleCloseProduct} type='primary'>
-							Submit
-						</Button>
-					</Space>
-				}
 			>
 				<CommonForm
 					title='Product details'
 					primaryButton='Save product'
-					onCancel={backToProducts}
-					onSubmit={updateProduct}
+					onCancel={handleCloseProduct}
+					onSubmit={() => {}}
 					form={form}
 				>
 					<Form.Item
@@ -225,19 +217,21 @@ const Product = (onClose, visible) => {
 							))}
 						</Select>
 					</Form.Item>
-
 					<Divider className='divider' />
-					<Button
-						className='delete-button'
-						type='link'
-						icon={<DeleteOutlined />}
-						onClick={() => toggleShowModal()}
-						disabled={loading}
-						danger
-						style={{ marginBlockEnd: '2.0em' }}
-					>
-						Delete product
-					</Button>
+					{product?.id && (
+						<Button
+							className='delete-button'
+							type='link'
+							icon={<DeleteOutlined />}
+							onClick={toggleShowModal}
+							disabled={loading}
+							danger
+							style={{ marginBlockEnd: '2.0em' }}
+						>
+							Delete product
+						</Button>
+					)}
+
 					{loading && (
 						<Spin style={{ display: 'flex', justifyContent: 'center' }} />
 					)}
@@ -259,7 +253,7 @@ const Product = (onClose, visible) => {
 Product.propTypes = {
 	visible: bool.isRequired,
 	onClose: func.isRequired,
-	// product: object.isRequired,
+	product: object.isRequired,
 };
 
 export default Product;

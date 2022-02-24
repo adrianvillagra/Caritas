@@ -1,18 +1,15 @@
 import './ProductsList.less';
 import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
 	Col,
 	Input,
 	Table,
-	List,
 	Row,
 	Typography,
-	Spin,
 	Button,
 	Tooltip,
 	Divider,
-	Drawer,
-	Space,
 } from 'antd';
 import {
 	DeleteOutlined,
@@ -20,7 +17,6 @@ import {
 	PlusOutlined,
 	SearchOutlined,
 	SortDescendingOutlined,
-	CloseCircleOutlined,
 } from '@ant-design/icons';
 import CustomBreadcrum from '../Breadcrum/CustomBreadcrum';
 import ProductsService from '../../services/ProductsService';
@@ -157,9 +153,11 @@ const ProductList = () => {
 		productsService
 			.getAll()
 			.then((result) => {
+				console.log('result:', result);
 				if (typeof result != 'undefined') {
-					setProducts(result);
-					productsListFiltered(result);
+					setProducts(result.products);
+					setTotalCount(result.totalCount);
+					productsListFiltered(result.products);
 				}
 			})
 			.catch((err) => {
@@ -201,7 +199,6 @@ const ProductList = () => {
 
 	useEffect(() => {
 		getProductList();
-		setIsProductVisible(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -235,11 +232,10 @@ const ProductList = () => {
 			</Row>
 			<div className='ant-table-container'>
 				<Table
-					// scroll={{ y: 350 }}
 					columns={columns}
 					dataSource={products}
 					pagination={{
-						total: totalCount,
+						total: products.length,
 						showQuickJumper: true,
 						showSizeChanger: true,
 					}}
@@ -249,6 +245,7 @@ const ProductList = () => {
 					loading={loading}
 				/>
 			</div>
+
 			<ConfirmModal
 				afterClose={resetSelected}
 				visible={showModal}
@@ -258,7 +255,12 @@ const ProductList = () => {
 				handleCancel={toggleShowModal}
 				description={getModalDescription()}
 			/>
-			<Product visible={isProductVisible} onClose={handleProductPanel} />
+
+			<Product
+				visible={isProductVisible}
+				onClose={handleProductPanel}
+				product={productSelected}
+			/>
 		</div>
 	);
 };
