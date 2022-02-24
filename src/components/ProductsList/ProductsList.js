@@ -58,18 +58,21 @@ const ProductList = () => {
 		];
 	};
 
-	const goToEditProduct = (id) => history.push(`/product/${id}`);
+	const goToEditProduct = (item) => {
+		setSelected(item);
+		setIsProductVisible(true);
+	};
 
 	const goToAddProduct = () => {
 		// history.push('/product/');
-		console.log('entro al click');
+		setSelected(null);
 		setIsProductVisible(true);
 	};
 
 	const toggleShowModal = (item) => {
 		setShowModal(!showModal);
 
-		if (item && item.key) {
+		if (item && item.id) {
 			setSelected(item);
 		}
 	};
@@ -94,7 +97,7 @@ const ProductList = () => {
 				<Tooltip placement='top' title='Edit product'>
 					<EditOutlined
 						style={{ color: '#1991EB' }}
-						onClick={() => goToEditProduct(item.key)}
+						onClick={() => goToEditProduct(item)}
 					/>
 				</Tooltip>
 				<Divider type='vertical' style={{ margin: '0 10px' }} />
@@ -153,7 +156,6 @@ const ProductList = () => {
 		productsService
 			.getAll()
 			.then((result) => {
-				console.log('result:', result);
 				if (typeof result != 'undefined') {
 					setProducts(result.products);
 					setTotalCount(result.totalCount);
@@ -193,7 +195,7 @@ const ProductList = () => {
 	};
 
 	const handleProductPanel = () => {
-		console.log('entro al handleProductPanel');
+		resetSelected();
 		setIsProductVisible(false);
 	};
 
@@ -235,7 +237,7 @@ const ProductList = () => {
 					columns={columns}
 					dataSource={products}
 					pagination={{
-						total: products.length,
+						total: totalCount,
 						showQuickJumper: true,
 						showSizeChanger: true,
 					}}
@@ -259,7 +261,7 @@ const ProductList = () => {
 			<Product
 				visible={isProductVisible}
 				onClose={handleProductPanel}
-				product={productSelected}
+				product={selected}
 			/>
 		</div>
 	);

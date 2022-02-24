@@ -19,6 +19,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { ErrorContext } from '../../providers/ErrorProvider';
 import TypesService from '../../services/TypesService';
 import MesuaresService from '../../services/MesuaresService';
+import { useForm } from 'react-hook-form';
 
 const Product = ({ onClose, visible, product }) => {
 	const [productName, setProductName] = useState('');
@@ -35,6 +36,7 @@ const Product = ({ onClose, visible, product }) => {
 	const productsService = new ProductsService();
 	const { Option } = Select;
 	const { Text } = Typography;
+	const { reset } = useForm();
 
 	const backToProducts = () => history.replace('/products');
 
@@ -67,26 +69,20 @@ const Product = ({ onClose, visible, product }) => {
 		}
 	};
 
-	const getProduct = (id) => {
-		setLoading(true);
+	const setValuesProduct = () => {
+		form.setFieldsValue({
+			product_name: product.name,
+			type_name: product.type_id,
+			mesuare_name: product.mesuare_name,
+		});
+	};
 
-		productsService
-			.get(id)
-			.then((result) => {
-				setProductName(result.name);
-				form.setFieldsValue({
-					name: result.name,
-					type: result.type_id,
-					mesuare: result.mesuare_id,
-				});
-			})
-			.catch((err) => {
-				console.error(err.toString());
-				// setError(err.toString());
-			})
-			.finally(() => {
-				setLoading(false);
-			});
+	const resetValuesForm = () => {
+		form.setFieldsValue({
+			product_name: '',
+			type_name: '',
+			mesuare_name: '',
+		});
 	};
 
 	const getMesuares = () => {
@@ -97,9 +93,11 @@ const Product = ({ onClose, visible, product }) => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setMesuares(result);
-					form.setFieldsValue({
-						mesuare: result[0].id,
-					});
+					if (!product?.mesuare_name) {
+						form.setFieldsValue({
+							mesuare_name: result[0].name,
+						});
+					}
 				}
 			})
 			.catch((err) => {
@@ -119,9 +117,11 @@ const Product = ({ onClose, visible, product }) => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setTypes(result);
-					form.setFieldsValue({
-						type: result[0].id,
-					});
+					if (!product?.type_name) {
+						form.setFieldsValue({
+							type_name: result[0].id,
+						});
+					}
 				}
 			})
 			.catch((err) => {
@@ -147,18 +147,17 @@ const Product = ({ onClose, visible, product }) => {
 	};
 
 	useEffect(() => {
+		resetValuesForm();
 		getMesuares();
 		getTypes();
-		if (product.length !== 0) {
-			getProduct(product.id);
-		}
+		if (product?.id) setValuesProduct();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [product]);
 
 	return (
 		<>
 			<Drawer
-				title='Create a new product'
+				title={product?.name ? `Edit ${product.name}` : 'Create a new product'}
 				width={520}
 				onClose={handleCloseProduct}
 				visible={visible}
@@ -173,7 +172,7 @@ const Product = ({ onClose, visible, product }) => {
 				>
 					<Form.Item
 						className='field-name'
-						name='name'
+						name='product_name'
 						label='Product Name'
 						rules={[{ required: true }, { min: 2 }, { max: 50 }]}
 					>
@@ -181,7 +180,7 @@ const Product = ({ onClose, visible, product }) => {
 					</Form.Item>
 					<Form.Item
 						className='edit-product-types'
-						name='type'
+						name='type_name'
 						label='Type'
 						rules={[{ required: true }]}
 					>
@@ -191,28 +190,28 @@ const Product = ({ onClose, visible, product }) => {
 							style={{ width: '100%' }}
 							placeholder='Select type'
 						>
-							{types.map((mesuare, index) => (
-								<Option key={index} value={mesuare.id}>
-									{mesuare.name}
+							{types.map((type, index) => (
+								<Option key={index} value={type.id}>
+									{type.name}
 								</Option>
 							))}
 						</Select>
 					</Form.Item>
 					<Form.Item
 						className='edit-product-mesuares'
-						name='mesuare'
+						name='mesuare_name'
 						label='Mesuare'
 						rules={[{ required: true }]}
 					>
 						<Select
-							className='type-select'
+							className='mesuare-select'
 							allowClear
 							style={{ width: '100%' }}
 							placeholder='Select mesuare'
 						>
-							{mesuares.map((type, index) => (
-								<Option key={index} value={type.id}>
-									{type.name}
+							{mesuares.map((mesuare, index) => (
+								<Option key={index} value={mesuare.name}>
+									{mesuare.name}
 								</Option>
 							))}
 						</Select>
@@ -242,7 +241,8 @@ const Product = ({ onClose, visible, product }) => {
 						okTitle='Yes, delete product'
 						handleOk={deleteProduct}
 						handleCancel={toggleShowModal}
-						description={getModalDescription()}
+						description={getModalDescription}
+						afterClose={resetValuesForm}
 					/>
 				</CommonForm>
 			</Drawer>
