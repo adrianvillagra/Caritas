@@ -43,7 +43,7 @@ const ProductList = () => {
 	const resetSelected = () => setSelected(null);
 
 	const getSelectedName = () => {
-		return selected && selected.product ? `${selected.product}` : 'product';
+		return selected && selected.name ? `${selected.name}` : '';
 	};
 
 	const getModalDescription = () => {
@@ -64,7 +64,6 @@ const ProductList = () => {
 	};
 
 	const goToAddProduct = () => {
-		// history.push('/product/');
 		setSelected(null);
 		setIsProductVisible(true);
 	};

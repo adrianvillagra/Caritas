@@ -28,7 +28,6 @@ const Product = ({ onClose, visible, product }) => {
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	// const { setError } = React.useContext(ErrorContext);
-	const history = useHistory();
 	const [form] = Form.useForm();
 	const { id } = useParams();
 	const typesService = new TypesService();
@@ -36,16 +35,14 @@ const Product = ({ onClose, visible, product }) => {
 	const productsService = new ProductsService();
 	const { Option } = Select;
 	const { Text } = Typography;
-	const { reset } = useForm();
 
-	const backToProducts = () => history.replace('/products');
-
-	const updateProduct = async (values) => {
+	const handleSaveProduct = async (values) => {
 		setLoading(true);
 
 		try {
-			await productsService.update(id, values);
-			backToProducts();
+			console.log('values:', values);
+			// await productsService.update(id, values);
+			// handleCloseProduct();
 		} catch (err) {
 			// setError(err.toString());
 		} finally {
@@ -61,7 +58,7 @@ const Product = ({ onClose, visible, product }) => {
 
 		try {
 			await productsService.delete(id);
-			backToProducts();
+			handleCloseProduct();
 		} catch (err) {
 			// setError(err.toString());
 		} finally {
@@ -70,18 +67,19 @@ const Product = ({ onClose, visible, product }) => {
 	};
 
 	const setValuesProduct = () => {
+		setProductName(product.name);
 		form.setFieldsValue({
-			product_name: product.name,
-			type_name: product.type_id,
-			mesuare_name: product.mesuare_name,
+			mesuare_id: product.mesuare_id,
+			type_id: product.type_id,
+			name: product.name,
 		});
 	};
 
 	const resetValuesForm = () => {
 		form.setFieldsValue({
-			product_name: '',
-			type_name: '',
-			mesuare_name: '',
+			name: '',
+			type_id: '',
+			mesuare_id: '',
 		});
 	};
 
@@ -93,9 +91,9 @@ const Product = ({ onClose, visible, product }) => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setMesuares(result);
-					if (!product?.mesuare_name) {
+					if (!product?.id) {
 						form.setFieldsValue({
-							mesuare_name: result[0].name,
+							mesuare_id: result[0].id,
 						});
 					}
 				}
@@ -117,9 +115,9 @@ const Product = ({ onClose, visible, product }) => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setTypes(result);
-					if (!product?.type_name) {
+					if (!product?.id) {
 						form.setFieldsValue({
-							type_name: result[0].id,
+							type_id: result[0].id,
 						});
 					}
 				}
@@ -133,12 +131,19 @@ const Product = ({ onClose, visible, product }) => {
 			});
 	};
 
+	const getSelectedName = () => {
+		return product && product.name ? `${product.name}` : '';
+	};
+
 	const getModalDescription = () => {
 		return [
 			<Text key={1} strong>
-				The product {productName} has active projects.
+				The product {getSelectedName()} has active recipes.
 			</Text>,
-			<Text key={2}> Please confirm you want to delete {productName}.</Text>,
+			<Text key={2}>
+				{' '}
+				Please confirm you want to delete {getSelectedName()}.
+			</Text>,
 		];
 	};
 
@@ -150,7 +155,9 @@ const Product = ({ onClose, visible, product }) => {
 		resetValuesForm();
 		getMesuares();
 		getTypes();
-		if (product?.id) setValuesProduct();
+		if (product?.id) {
+			setValuesProduct();
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [product]);
 
@@ -167,12 +174,12 @@ const Product = ({ onClose, visible, product }) => {
 					title='Product details'
 					primaryButton='Save product'
 					onCancel={handleCloseProduct}
-					onSubmit={() => {}}
+					onSubmit={handleSaveProduct}
 					form={form}
 				>
 					<Form.Item
 						className='field-name'
-						name='product_name'
+						name='name'
 						label='Product Name'
 						rules={[{ required: true }, { min: 2 }, { max: 50 }]}
 					>
@@ -180,13 +187,12 @@ const Product = ({ onClose, visible, product }) => {
 					</Form.Item>
 					<Form.Item
 						className='edit-product-types'
-						name='type_name'
+						name='type_id'
 						label='Type'
 						rules={[{ required: true }]}
 					>
 						<Select
 							className='type-select'
-							allowClear
 							style={{ width: '100%' }}
 							placeholder='Select type'
 						>
@@ -199,7 +205,7 @@ const Product = ({ onClose, visible, product }) => {
 					</Form.Item>
 					<Form.Item
 						className='edit-product-mesuares'
-						name='mesuare_name'
+						name='mesuare_id'
 						label='Mesuare'
 						rules={[{ required: true }]}
 					>
@@ -210,7 +216,7 @@ const Product = ({ onClose, visible, product }) => {
 							placeholder='Select mesuare'
 						>
 							{mesuares.map((mesuare, index) => (
-								<Option key={index} value={mesuare.name}>
+								<Option key={index} value={mesuare.id}>
 									{mesuare.name}
 								</Option>
 							))}
@@ -241,7 +247,7 @@ const Product = ({ onClose, visible, product }) => {
 						okTitle='Yes, delete product'
 						handleOk={deleteProduct}
 						handleCancel={toggleShowModal}
-						description={getModalDescription}
+						description={getModalDescription()}
 						afterClose={resetValuesForm}
 					/>
 				</CommonForm>
