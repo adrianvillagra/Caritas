@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Configuration from './ServiceConfig';
 
-class ProductsService {
+class MesuaresService {
 	constructor(setError) {
 		this.config = new Configuration();
-		this.path = `${this.config.baseurl}/${'products/'}`;
+		this.path = `${this.config.baseurl}/${'mesuares/'}`;
 		// this.setError = setError;
 	}
 
@@ -111,4 +111,4 @@ class ProductsService {
 	}
 }
 
-export default ProductsService;
+export default MesuaresService;

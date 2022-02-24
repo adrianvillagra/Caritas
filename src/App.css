@@ -25,3 +25,12 @@
 .site-layout-background {
 	background: #fff;
 }
+
+textarea {
+	resize: none;
+}
+
+.flex {
+	display: inline-flex;
+	justify-content: flex-end;
+}

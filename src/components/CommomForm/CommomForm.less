@@ -1,0 +1,191 @@
+.form-main-container {
+	width: 100%;
+	height: auto;
+	background-color: #fff;
+	margin-bottom: 20px;
+	padding-top: 24px;
+	padding-bottom: 20px;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px 0 rgba(66, 75, 90, 0.15);
+	&.new-segment {
+		padding-top: 20px;
+	}
+
+	.form-white-container {
+		max-width: 454px;
+		margin: 0 auto;
+		&.small {
+			max-width: 275px;
+			height: auto;
+		}
+		&.new-analyst {
+			max-width: 614px;
+		}
+		&.edit-analyst {
+			max-width: 690px;
+		}
+		&.new-project,
+		&.project-types,
+		&.project-construct-details {
+			max-width: 525px;
+		}
+		&.edit-segment {
+			max-width: 450px;
+		}
+
+		.ant-form-item-label {
+			height: 18px;
+			margin-bottom: 5px;
+			padding: 0;
+			label {
+				color: #424b5a;
+				font-weight: 600;
+			}
+		}
+
+		//COMMON STYLES
+
+		.field-name {
+			margin-bottom: 21px;
+			&.project-construct {
+				.ant-form-item-control {
+					height: 22px;
+				}
+			}
+		}
+
+		.common-textarea {
+			height: 106px;
+			padding: 11px 20px 9px 12px;
+			margin-bottom: 19px;
+			&.project,
+			&.project-construct,
+			&.new-segment {
+				height: 86px;
+			}
+			.new-segment {
+				margin-bottom: 27px;
+			}
+		}
+
+		.divider {
+			margin: 0 0 20px 0;
+			&.analyst {
+				margin-bottom: 14px;
+			}
+		}
+
+		.delete-button {
+			color: #ff4d4f;
+			padding: 0;
+			height: 18px;
+			border: none;
+			span {
+				height: inherit;
+			}
+			&.edit-type {
+				margin-bottom: 3px;
+			}
+		}
+		.confidential-checkbox {
+			height: 22px;
+			margin: 0 0 4px;
+			color: #424b5a;
+			&.edit {
+				margin-bottom: 20px;
+			}
+
+			&.new-analyst {
+				margin-bottom: 21px;
+			}
+		}
+		.edit-client-projects {
+			margin-bottom: 20px;
+		}
+
+		.projects-select {
+			color: #424b5a;
+		}
+
+		//SETTINGS STYLES
+		.settings-field {
+			margin-bottom: 15px;
+			.ant-form-item-label {
+				margin-bottom: 2px;
+			}
+		}
+
+		.changePass {
+			padding-left: 0;
+			margin: 0;
+			height: 22px;
+		}
+
+		// ANALYSTS STYLES
+		.new-analyst-data {
+			margin-bottom: 11px;
+			.ant-form-item-label {
+				margin-bottom: 4px;
+			}
+		}
+		.new-analyst-partners {
+			margin-bottom: 21px;
+			.ant-form-item-label {
+				margin-bottom: 4px;
+			}
+		}
+
+		//PROJECT TYPES STYLES
+		.edit-type-name {
+			margin-bottom: 20px;
+			.ant-form-item-label {
+				margin-bottom: 5px;
+			}
+		}
+
+		.another-button {
+			height: 18px;
+			padding: 0;
+			margin-top: 3px;
+			&.new-type {
+				margin: 15px 0 8px 0;
+			}
+			&.edit-types {
+				margin: 15px 0 20px 0;
+			}
+		}
+
+		.edit-analyst-text {
+			color: #424b5a;
+			&.date {
+				color: #667590;
+			}
+		}
+
+		.edit-analyst-h-space {
+			height: 22px;
+			margin-bottom: 17px;
+		}
+
+		.edit-analyst-v-space {
+			margin-bottom: 17px;
+		}
+
+		.list-container {
+			padding: 5px 10px 5px 14px;
+			margin-bottom: 20px;
+			width: 100%;
+			height: 182px;
+			border: 1px solid #d9d9d9;
+			border-radius: 4px;
+			&.construct-details {
+				height: 188px;
+				padding: 9px 7px 9px 16px;
+			}
+		}
+
+		.project-construct-text {
+			color: #424b5a;
+		}
+	}
+}

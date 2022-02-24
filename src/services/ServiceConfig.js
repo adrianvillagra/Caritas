@@ -1,5 +1,5 @@
 class Configuration {
-	baseurl = process.env.REACT_APP_BASE_URL;
+	baseurl = 'http://localhost:8000';
 }
 
 export default Configuration;
