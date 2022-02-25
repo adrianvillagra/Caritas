@@ -12,7 +12,7 @@ class ProductsService {
 		return axios
 			.get(this.path)
 			.then((response) => {
-				return this.parseDataTable(response);
+				return response.data;
 			})
 			.catch((err) => {
 				if (err.response) {
@@ -39,14 +39,11 @@ class ProductsService {
 	}
 
 	async create(item) {
+		console.log('item:', item);
 		return axios
-			.post(this.path, item, {
-				headers: {
-					Authorization: `Bearer ${this.token}`,
-				},
-			})
+			.post(this.path, item)
 			.then((response) => {
-				return response.data;
+				return response;
 			})
 			.catch((err) => {
 				if (err.response) {
@@ -58,6 +55,7 @@ class ProductsService {
 	}
 
 	async delete(id) {
+		console.log('entro al delete, id:', id);
 		return axios
 			.delete(`${this.path}${id}`)
 			.then((response) => {
@@ -76,40 +74,23 @@ class ProductsService {
 		return axios
 			.put(`${this.path}${id}`, item)
 			.then((response) => {
-				if (response.status === 200) {
-					return response.data;
-				}
+				return response;
 			})
 			.catch((err) => {
 				if (err.response) {
-					this.handleResponseError(err.response);
+					return err.response;
 				} else {
-					this.handleError(err);
+					return err;
 				}
 			});
 	}
 
-	async parseDataTable(response) {
-		// const tableData = response.data.results.map((object) => {
-		// 	return {
-		// 		key: object.id,
-		// 		client: object.name,
-		// 		partner: object.global_partner,
-		// 		activeProjects: object.active_projects,
-		// 	};
-		// });
-
-		// response.data.tableData = tableData;
-
-		return response.data;
-	}
-
 	handleResponseError(response) {
-		this.setError(response.status);
+		return response;
 	}
 
 	handleError(error) {
-		this.setError(error.message);
+		return error;
 	}
 }
 

@@ -1,7 +1,7 @@
 import './ProductsList.less';
 import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
+	Alert,
 	Col,
 	Input,
 	Table,
@@ -30,10 +30,13 @@ const ProductList = () => {
 	const [isProductVisible, setIsProductVisible] = useState(false);
 	const [productSelected, setProductSelected] = useState([]);
 	const [productsListFiltered, setProductListFiltered] = useState([]);
+	const [messageAlert, setMessageAlert] = useState('');
 	const [selected, setSelected] = useState(null);
 	const [showModal, setShowModal] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [typeAlert, setTypeAlert] = useState('');
 	const [totalCount, setTotalCount] = useState(0);
+	const [visibleAlert, setVisibleAlert] = useState(false);
 	const history = useHistory();
 	// const { setError } = useContext(ErrorContext);
 	const productsService = new ProductsService();
@@ -155,6 +158,7 @@ const ProductList = () => {
 		productsService
 			.getAll()
 			.then((result) => {
+				console.log('result:', result);
 				if (typeof result != 'undefined') {
 					setProducts(result.products);
 					setTotalCount(result.totalCount);
@@ -198,6 +202,16 @@ const ProductList = () => {
 		setIsProductVisible(false);
 	};
 
+	const handleAlert = (message, type) => {
+		setMessageAlert(message);
+		setTypeAlert(type);
+		setVisibleAlert(true);
+	};
+
+	const handleCloseAlert = () => {
+		setVisibleAlert(false);
+	};
+
 	useEffect(() => {
 		getProductList();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -205,6 +219,19 @@ const ProductList = () => {
 
 	return (
 		<div className='Products'>
+			<div className='alert' style={{ paddingBlockEnd: '1.5em' }}>
+				{visibleAlert && (
+					<Alert
+						onClose={handleCloseAlert}
+						message={messageAlert}
+						type={typeAlert}
+						showIcon
+						banner
+						closable
+					/>
+				)}
+			</div>
+
 			<Row justify='space-between'>
 				<Col>
 					<CustomBreadcrum routes={routes} />
@@ -233,6 +260,7 @@ const ProductList = () => {
 			</Row>
 			<div className='ant-table-container'>
 				<Table
+					// rowKey={(record) => record.uid}
 					columns={columns}
 					dataSource={products}
 					pagination={{
@@ -261,6 +289,7 @@ const ProductList = () => {
 				visible={isProductVisible}
 				onClose={handleProductPanel}
 				product={selected}
+				alert={handleAlert}
 			/>
 		</div>
 	);

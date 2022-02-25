@@ -22,9 +22,9 @@ import TypesService from '../../services/TypesService';
 import MesuaresService from '../../services/MesuaresService';
 import { useForm } from 'react-hook-form';
 
-const Product = ({ onClose, visible, product }) => {
+const Product = ({ alert, onClose, visible, product }) => {
 	const [productName, setProductName] = useState('');
-	const [showAlert, setShowAlert] = useState(false);
+	const [visibleAlert, setVisibleAlert] = useState(false);
 	const [typeAlert, setTypeAlert] = useState('');
 	const [messageAlert, setMessageAlert] = useState('');
 	const [types, setTypes] = useState([]);
@@ -39,22 +39,26 @@ const Product = ({ onClose, visible, product }) => {
 	const productsService = new ProductsService();
 	const { Option } = Select;
 	const { Text } = Typography;
+	const successAlertType = 'success';
+	const errorAlertType = 'error';
 
 	const handleSaveProduct = async (values) => {
 		setLoading(true);
-
-		try {
-			const response = await productsService.update(product.id, values);
-			setMessageAlert(response.data.message);
-			setTypeAlert('success');
-			// handleCloseProduct();
-		} catch (err) {
-			setMessageAlert(err);
-			setTypeAlert('error');
-			// setError(err.toString());
-		} finally {
+		let response;
+		if (product?.id) {
+			response = await productsService.update(product.id, values);
+		} else {
+			response = await productsService.create(values);
+		}
+		if (response.status === 200) {
+			alert(response.data.message, successAlertType);
+			handleCloseProduct();
 			setLoading(false);
-			setShowAlert(true);
+		} else {
+			setMessageAlert(response.data.message);
+			setTypeAlert(errorAlertType);
+			setVisibleAlert(true);
+			setLoading(false);
 		}
 	};
 
@@ -65,7 +69,8 @@ const Product = ({ onClose, visible, product }) => {
 		toggleShowModal();
 
 		try {
-			await productsService.delete(id);
+			const response = await productsService.delete(product.id);
+			console.log('response:', response);
 			handleCloseProduct();
 		} catch (err) {
 			// setError(err.toString());
@@ -159,6 +164,10 @@ const Product = ({ onClose, visible, product }) => {
 		onClose();
 	};
 
+	const handleCloseAlert = () => {
+		setVisibleAlert(false);
+	};
+
 	useEffect(() => {
 		resetValuesForm();
 		getMesuares();
@@ -170,7 +179,7 @@ const Product = ({ onClose, visible, product }) => {
 	}, [product]);
 
 	return (
-		<>
+		<div className='Product'>
 			<Drawer
 				title={product?.name ? `Edit ${product.name}` : 'Create a new product'}
 				width={520}
@@ -178,6 +187,17 @@ const Product = ({ onClose, visible, product }) => {
 				visible={visible}
 				bodyStyle={{ paddingBottom: 80 }}
 			>
+				{visibleAlert && (
+					<div style={{ paddingBlockEnd: '1.5em' }}>
+						<Alert
+							afterClose={handleCloseAlert}
+							message={messageAlert}
+							type={typeAlert}
+							showIcon
+							closable
+						/>
+					</div>
+				)}
 				<CommonForm
 					title='Product details'
 					primaryButton='Save product'
@@ -259,14 +279,12 @@ const Product = ({ onClose, visible, product }) => {
 					/>
 				</CommonForm>
 			</Drawer>
-			{showAlert && (
-				<Alert message={messageAlert} type={typeAlert} showIcon closable />
-			)}
-		</>
+		</div>
 	);
 };
 
 Product.propTypes = {
+	alert: func.isRequired,
 	visible: bool.isRequired,
 	onClose: func.isRequired,
 	product: object.isRequired,
