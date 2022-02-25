@@ -76,7 +76,9 @@ class ProductsService {
 		return axios
 			.put(`${this.path}${id}`, item)
 			.then((response) => {
-				return response.data;
+				if (response.status === 200) {
+					return response.data;
+				}
 			})
 			.catch((err) => {
 				if (err.response) {

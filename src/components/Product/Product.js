@@ -1,6 +1,7 @@
 import './Product.less';
 import React, { useEffect, useState } from 'react';
 import {
+	Alert,
 	Button,
 	Divider,
 	Form,
@@ -23,6 +24,9 @@ import { useForm } from 'react-hook-form';
 
 const Product = ({ onClose, visible, product }) => {
 	const [productName, setProductName] = useState('');
+	const [showAlert, setShowAlert] = useState(false);
+	const [typeAlert, setTypeAlert] = useState('');
+	const [messageAlert, setMessageAlert] = useState('');
 	const [types, setTypes] = useState([]);
 	const [mesuares, setMesuares] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -40,13 +44,17 @@ const Product = ({ onClose, visible, product }) => {
 		setLoading(true);
 
 		try {
-			console.log('values:', values);
-			// await productsService.update(id, values);
+			const response = await productsService.update(product.id, values);
+			setMessageAlert(response.data.message);
+			setTypeAlert('success');
 			// handleCloseProduct();
 		} catch (err) {
+			setMessageAlert(err);
+			setTypeAlert('error');
 			// setError(err.toString());
 		} finally {
 			setLoading(false);
+			setShowAlert(true);
 		}
 	};
 
@@ -248,10 +256,12 @@ const Product = ({ onClose, visible, product }) => {
 						handleOk={deleteProduct}
 						handleCancel={toggleShowModal}
 						description={getModalDescription()}
-						afterClose={resetValuesForm}
 					/>
 				</CommonForm>
 			</Drawer>
+			{showAlert && (
+				<Alert message={messageAlert} type={typeAlert} showIcon closable />
+			)}
 		</>
 	);
 };
