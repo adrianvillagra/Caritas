@@ -6,6 +6,8 @@ import Home from './components/Home/Home';
 import Error from './components/Error/Error';
 import ProductList from './components/ProductsList/ProductsList';
 import Product from './components/Product/Product';
+import RecipesList from './components/RecipesList/RecipesList';
+import Recipe from './components/Recipe/Recipe';
 
 function App() {
 	return (
@@ -27,13 +29,20 @@ function App() {
 							<Product />
 						</MainLayout>
 					</Route>
-					<Route exact path='/product/ui=:id'>
+					<Route exact path='/recipes/'>
 						<MainLayout>
-							<Product />
+							<RecipesList />
 						</MainLayout>
 					</Route>
-					<Route exact path='/recipes'>
-						<MainLayout>{/* <FinishPurchase /> */}</MainLayout>
+					<Route exact path='/recipe/'>
+						<MainLayout>
+							<Recipe />
+						</MainLayout>
+					</Route>
+					<Route exact path='/recipe/:id'>
+						<MainLayout>
+							<Recipe />
+						</MainLayout>
 					</Route>
 					<Route exact path='/supplier'>
 						<MainLayout>{/* <NewSale /> */}</MainLayout>

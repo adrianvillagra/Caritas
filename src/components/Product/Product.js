@@ -70,7 +70,6 @@ const Product = ({ alert, onClose, visible, product }) => {
 
 		try {
 			const response = await productsService.delete(product.id);
-			console.log('response:', response);
 			handleCloseProduct();
 		} catch (err) {
 			// setError(err.toString());

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Configuration from './ServiceConfig';
 
-class ProductsService {
+class RecipeDetailsService {
 	constructor(setError) {
 		this.config = new Configuration();
-		this.path = `${this.config.baseurl}/${'products/'}`;
+		this.path = `${this.config.baseurl}/${'recipe_details/'}`;
 		// this.setError = setError;
 	}
 
@@ -12,7 +12,7 @@ class ProductsService {
 		return axios
 			.get(this.path)
 			.then((response) => {
-				return response.data;
+				return this.parseDataTable(response);
 			})
 			.catch((err) => {
 				if (err.response) {
@@ -38,9 +38,19 @@ class ProductsService {
 			});
 	}
 
-	async create(item) {
+	async create(recipeId, itemList) {
+		let body = [];
+
+		for (let item of itemList) {
+			body.push({
+				recipe_id: recipeId,
+				product_id: item.product_id,
+				quantity: item.quantity,
+			});
+		}
+
 		return axios
-			.post(this.path, item)
+			.post(this.path, body)
 			.then((response) => {
 				return response;
 			})
@@ -55,7 +65,7 @@ class ProductsService {
 
 	async delete(id) {
 		return axios
-			.delete(`${this.path}${id}`)
+			.delete(`${this.path}/${id}`)
 			.then((response) => {
 				return response;
 			})
@@ -68,19 +78,43 @@ class ProductsService {
 			});
 	}
 
-	async update(id, item) {
+	async update(recipeId, itemList) {
+		let body = [];
+
+		for (let item of itemList) {
+			body.push({
+				recipe_id: recipeId,
+				product_id: item.product_id,
+				quantity: item.quantity,
+			});
+		}
 		return axios
-			.put(`${this.path}${id}`, item)
+			.put(`${this.path}${recipeId}`, body)
 			.then((response) => {
-				return response;
+				return response.data;
 			})
 			.catch((err) => {
 				if (err.response) {
-					return err.response;
+					this.handleResponseError(err.response);
 				} else {
-					return err;
+					this.handleError(err);
 				}
 			});
+	}
+
+	async parseDataTable(response) {
+		// const tableData = response.data.results.map((object) => {
+		// 	return {
+		// 		key: object.id,
+		// 		client: object.name,
+		// 		partner: object.global_partner,
+		// 		activeProjects: object.active_projects,
+		// 	};
+		// });
+
+		// response.data.tableData = tableData;
+
+		return response.data;
 	}
 
 	handleResponseError(response) {
@@ -92,4 +126,4 @@ class ProductsService {
 	}
 }
 
-export default ProductsService;
+export default RecipeDetailsService;

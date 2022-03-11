@@ -84,8 +84,7 @@ const ProductList = () => {
 		toggleShowModal();
 
 		try {
-			// await service.delete(selected.key);
-			// getClients();
+			const response = await productsService.delete(selected.id);
 		} catch (err) {
 			// setError(err.toString());
 		} finally {
