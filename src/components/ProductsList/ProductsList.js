@@ -157,7 +157,6 @@ const ProductList = () => {
 		productsService
 			.getAll()
 			.then((result) => {
-				console.log('result:', result);
 				if (typeof result != 'undefined') {
 					setProducts(result.products);
 					setTotalCount(result.totalCount);

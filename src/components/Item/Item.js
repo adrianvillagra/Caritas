@@ -8,7 +8,6 @@ const Item = ({ recipe }) => {
 
 	const handleDeleteRecipe = async (recipeId) => {
 		try {
-			console.log('responseDeleteListProduct:');
 		} catch (err) {
 			// setError(err.toString());
 		} finally {

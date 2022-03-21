@@ -33,12 +33,12 @@ const NavBar = () => {
 				<Menu.Item key='stock' icon={<NotificationOutlined />}>
 					<NavLink to='/stock'>Stock</NavLink>
 				</Menu.Item>
-				<SubMenu key='subOrder' icon={<AppstoreOutlined />} title='Order'>
-					<Menu.Item key='order'>
-						<NavLink to='/order/'>Order</NavLink>
+				<SubMenu key='subOrder' icon={<AppstoreOutlined />} title='Calendar'>
+					<Menu.Item key='calendar'>
+						<NavLink to='/calendar'>View Calendar</NavLink>
 					</Menu.Item>
 					<Menu.Item key='sofa-couches'>
-						<NavLink to='/order/order_list'>Lists</NavLink>
+						<NavLink to='/calendar/recipe'>Add recipe</NavLink>
 					</Menu.Item>
 				</SubMenu>
 				<Menu.Item key='contact' icon={<WhatsAppOutlined />}>

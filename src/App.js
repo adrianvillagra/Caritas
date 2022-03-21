@@ -8,6 +8,7 @@ import ProductList from './components/ProductsList/ProductsList';
 import Product from './components/Product/Product';
 import RecipesList from './components/RecipesList/RecipesList';
 import Recipe from './components/Recipe/Recipe';
+import CalendarRecipes from './components/CalendarRecipes/CalendarRecipes';
 
 function App() {
 	return (
@@ -44,8 +45,10 @@ function App() {
 							<Recipe />
 						</MainLayout>
 					</Route>
-					<Route exact path='/supplier'>
-						<MainLayout>{/* <NewSale /> */}</MainLayout>
+					<Route exact path='/calendar'>
+						<MainLayout>
+							<CalendarRecipes />
+						</MainLayout>
 					</Route>
 					<Route exact path='/order'>
 						<MainLayout>{/* <Cart /> */}</MainLayout>
