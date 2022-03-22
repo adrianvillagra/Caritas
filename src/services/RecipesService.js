@@ -108,7 +108,7 @@ class RecipesService {
 					key: index,
 					product_name: object.productName,
 					product_id: object.productId,
-					mesuare: object.mesuare,
+					measure: object.measure,
 					quantity: object.quantity,
 				};
 			});

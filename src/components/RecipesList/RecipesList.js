@@ -6,7 +6,6 @@ import RecipesService from '../../services/RecipesService';
 import { ErrorContext } from '../../providers/ErrorProvider';
 import { useHistory } from 'react-router-dom';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
-import Product from '../Product/Product';
 import Item from '../Item/Item';
 
 const RecipesList = () => {
@@ -62,7 +61,7 @@ const RecipesList = () => {
 		try {
 			const response = await recipesService.delete(id);
 		} catch (err) {
-			// setError(err.toString());
+			console.error(err);
 		} finally {
 			setLoading(false);
 		}
@@ -154,7 +153,7 @@ const RecipesList = () => {
 								onClick={goToAddRecipe}
 								icon={<PlusOutlined />}
 							>
-								Add new product
+								Add new recipe
 							</Button>
 						</Col>
 					</Row>

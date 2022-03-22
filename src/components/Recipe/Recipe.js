@@ -93,7 +93,7 @@ const Recipe = () => {
 
 	const edit = (record) => {
 		form.setFieldsValue({
-			mesuare: '',
+			measure: '',
 			quantity: '',
 			...record,
 		});
@@ -134,10 +134,10 @@ const Recipe = () => {
 			render: (_, record) => renderSelect(record),
 		},
 		{
-			title: 'Mesuare',
-			dataIndex: 'mesuare',
+			title: 'Measure',
+			dataIndex: 'measure',
 			align: 'left',
-			key: 'mesuare',
+			key: 'measure',
 			width: '5%',
 			editable: true,
 		},
@@ -157,8 +157,6 @@ const Recipe = () => {
 		},
 	];
 
-	const saveDetailRecipe = (recipeId, recipeDetails) => {};
-
 	const handleSaveRecipe = async (values) => {
 		setLoading(true);
 		let response;
@@ -176,12 +174,11 @@ const Recipe = () => {
 					recipes
 				);
 			}
-
 			if (response?.status === 'OK') {
 				setMessageAlert(response.message);
 				setTypeAlert(successAlertType);
 				setVisibleAlert(true);
-				handleCloseRecipe();
+				// handleCloseRecipe();
 				setLoading(false);
 			} else {
 				setMessageAlert(response.message);
@@ -200,7 +197,7 @@ const Recipe = () => {
 	const getModalDescription = () => {
 		return [
 			<Text key={1} strong>
-				{`The recipe ${recipe.name} has asigned in calendar.`}
+				{`The recipe ${recipe.name} has assigned in calendar.`}
 			</Text>,
 			<Text key={2}>
 				{' '}
@@ -228,7 +225,7 @@ const Recipe = () => {
 	const setValuesRecipe = () => {
 		setRecipeName(recipe.name);
 		form.setFieldsValue({
-			mesuare_id: recipe.mesuare_id,
+			measure_id: recipe.measure_id,
 			type_id: recipe.type_id,
 			name: recipe.name,
 		});
@@ -238,7 +235,7 @@ const Recipe = () => {
 		form.setFieldsValue({
 			name: '',
 			type_id: '',
-			mesuare_id: '',
+			measure_id: '',
 		});
 	};
 
@@ -249,12 +246,12 @@ const Recipe = () => {
 			.getAll()
 			.then((result) => {
 				if (typeof result != 'undefined') {
+					console.log('result:', result);
 					setProducts(result.products);
 				}
 			})
 			.catch((err) => {
 				console.error(err.toString());
-				// setError(err.toString());
 			})
 			.finally(() => {
 				setLoading(false);
@@ -265,7 +262,7 @@ const Recipe = () => {
 		const productFind = products.find((product) => product.id === index);
 		form.setFieldsValue({
 			product_name: productFind.name,
-			mesuare: productFind.mesuare_name,
+			measure: productFind.measure_name,
 			quantity: 0,
 			product_id: index,
 		});
@@ -375,7 +372,7 @@ const Recipe = () => {
 		for (let index = 0; index < dataTable.length; index++) {
 			form.setFieldsValue({
 				product_name: dataTable[index].product_name,
-				mesuare: dataTable[index].mesuare,
+				measure: dataTable[index].measure,
 				quantity: dataTable[index].quantity,
 				product_id: dataTable[index].product_id,
 			});

@@ -1,7 +1,6 @@
 import './CalendarRecipes.less';
 import React, { useEffect, useState } from 'react';
 import { Alert, Badge, Button, Calendar, Modal, Select } from 'antd';
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import CustomBreadcrum from '../Breadcrum/CustomBreadcrum';
 import CalendarService from '../../services/CalendarService';
 import RecipesService from '../../services/RecipesService';
@@ -22,50 +21,37 @@ const CalendarRecipes = () => {
 	const { Option } = Select;
 	const successAlertType = 'success';
 	const errorAlertType = 'error';
+	const defaultDateFormat = 'YYYY-MM-DD';
 
 	const getListData = (value) => {
-		let listData;
-		switch (value.date()) {
-			case 8:
-				listData = [
-					{ type: 'warning', content: 'This is warning event.' },
-					{ type: 'success', content: 'This is usual event.' },
-				];
-				break;
-			case 10:
-				listData = [
-					{ type: 'warning', content: 'This is warning event.' },
-					{ type: 'success', content: 'This is usual event.' },
-					{ type: 'error', content: 'This is error event.' },
-				];
-				break;
-			case 15:
-				listData = [
-					{ type: 'warning', content: 'This is warning event' },
-					{ type: 'success', content: 'This is very long usual event。。....' },
-					{ type: 'error', content: 'This is error event 1.' },
-					{ type: 'error', content: 'This is error event 2.' },
-					{ type: 'error', content: 'This is error event 3.' },
-					{ type: 'error', content: 'This is error event 4.' },
-				];
-				break;
-			default:
-		}
-		return listData || [];
+		const recipeToRenderTemp = calendar.find(
+			(item) => item.date === value.format(defaultDateFormat)
+		);
+		const listData = recipeToRenderTemp
+			? [
+					{
+						type: 'success',
+						content: recipeToRenderTemp.name,
+						id: recipeToRenderTemp.date,
+					},
+			  ]
+			: [];
+
+		return listData;
 	};
 
-	const dateCellRender = (value) => {
+	function dateCellRender(value) {
 		const listData = getListData(value);
 		return (
 			<ul className='events'>
 				{listData.map((item) => (
-					<li key={item.content}>
+					<li key={item.date}>
 						<Badge status={item.type} text={item.content} />
 					</li>
 				))}
 			</ul>
 		);
-	};
+	}
 
 	const getMonthData = (value) => {
 		if (value.month() === 8) {
@@ -125,11 +111,15 @@ const CalendarRecipes = () => {
 	};
 
 	const onSelect = (date) => {
-		const dateTemp = date.format('YYYY-MM-DD');
+		const dateTemp = date.format(defaultDateFormat);
 		const calendarIdFiltered = calendar.find((item) => item.date === dateTemp);
 		setDateSelected(dateTemp);
 		setRecipeIdSelected(calendarIdFiltered?.recipe_id ?? recipeIdSelected);
 		setIsVisibleModal(true);
+	};
+
+	const reloadData = () => {
+		getCalendar();
 	};
 
 	const handleSave = async () => {
@@ -164,6 +154,7 @@ const CalendarRecipes = () => {
 		setLoading(false);
 		setIsVisibleModal(false);
 		setVisibleAlert(true);
+		reloadData();
 	};
 
 	const handleCancel = () => {
