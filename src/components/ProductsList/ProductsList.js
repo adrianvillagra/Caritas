@@ -86,7 +86,7 @@ const ProductList = () => {
 		try {
 			const response = await productsService.delete(selected.id);
 		} catch (err) {
-			// setError(err.toString());
+			console.error(err);
 		} finally {
 			setLoading(false);
 		}
@@ -130,10 +130,10 @@ const ProductList = () => {
 			sortDirections: ['ascend', 'descend'],
 		},
 		{
-			title: 'Mesuare',
-			dataIndex: 'mesuare_name',
+			title: 'Measure',
+			dataIndex: 'measure',
 			align: 'left',
-			key: 'mesuare_name',
+			key: 'measure',
 			render: (text) => renderText(text),
 		},
 		{
@@ -164,7 +164,7 @@ const ProductList = () => {
 				}
 			})
 			.catch((err) => {
-				// setError(err.toString());
+				console.error(err);
 			})
 			.finally(() => {
 				setLoading(false);

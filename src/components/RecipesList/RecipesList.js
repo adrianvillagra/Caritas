@@ -79,7 +79,7 @@ const RecipesList = () => {
 				}
 			})
 			.catch((err) => {
-				// setError(err.toString());
+				console.error(err);
 			})
 			.finally(() => {
 				setLoading(false);

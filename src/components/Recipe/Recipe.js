@@ -246,7 +246,6 @@ const Recipe = () => {
 			.getAll()
 			.then((result) => {
 				if (typeof result != 'undefined') {
-					console.log('result:', result);
 					setProducts(result.products);
 				}
 			})
@@ -260,9 +259,10 @@ const Recipe = () => {
 
 	const handleSelectChange = (index) => {
 		const productFind = products.find((product) => product.id === index);
+		console.log('ProductFind:', productFind);
 		form.setFieldsValue({
 			product_name: productFind.name,
-			measure: productFind.measure_name,
+			measure: productFind.measure,
 			quantity: 0,
 			product_id: index,
 		});

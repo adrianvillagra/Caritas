@@ -19,7 +19,7 @@ import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ErrorContext } from '../../providers/ErrorProvider';
 import TypesService from '../../services/TypesService';
-import MesuaresService from '../../services/MesuaresService';
+import MeasuresService from '../../services/MeasuresService';
 import { useForm } from 'react-hook-form';
 
 const Product = ({ alert, onClose, visible, product }) => {
@@ -28,14 +28,14 @@ const Product = ({ alert, onClose, visible, product }) => {
 	const [typeAlert, setTypeAlert] = useState('');
 	const [messageAlert, setMessageAlert] = useState('');
 	const [types, setTypes] = useState([]);
-	const [mesuares, setMesuares] = useState([]);
+	const [measures, setMeasures] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	// const { setError } = React.useContext(ErrorContext);
 	const [form] = Form.useForm();
 	const { id } = useParams();
 	const typesService = new TypesService();
-	const mesuaresService = new MesuaresService();
+	const measuresService = new MeasuresService();
 	const productsService = new ProductsService();
 	const { Option } = Select;
 	const { Text } = Typography;
@@ -79,9 +79,10 @@ const Product = ({ alert, onClose, visible, product }) => {
 	};
 
 	const setValuesProduct = () => {
+		console.log('product:', product);
 		setProductName(product.name);
 		form.setFieldsValue({
-			mesuare_id: product.mesuare_id,
+			measure_id: product.measure_id,
 			type_id: product.type_id,
 			name: product.name,
 		});
@@ -91,21 +92,20 @@ const Product = ({ alert, onClose, visible, product }) => {
 		form.setFieldsValue({
 			name: '',
 			type_id: '',
-			mesuare_id: '',
+			measure_id: '',
 		});
 	};
 
-	const getMesuares = () => {
+	const getMeasures = () => {
 		setLoading(true);
-
-		mesuaresService
+		measuresService
 			.getAll()
 			.then((result) => {
 				if (typeof result != 'undefined') {
-					setMesuares(result);
+					setMeasures(result);
 					if (!product?.id) {
 						form.setFieldsValue({
-							mesuare_id: result[0].id,
+							measure_id: result[0].id,
 						});
 					}
 				}
@@ -169,7 +169,7 @@ const Product = ({ alert, onClose, visible, product }) => {
 
 	useEffect(() => {
 		resetValuesForm();
-		getMesuares();
+		getMeasures();
 		getTypes();
 		if (product?.id) {
 			setValuesProduct();
@@ -231,20 +231,20 @@ const Product = ({ alert, onClose, visible, product }) => {
 						</Select>
 					</Form.Item>
 					<Form.Item
-						className='edit-product-mesuares'
-						name='mesuare_id'
-						label='Mesuare'
+						className='edit-product-measures'
+						name='measure_id'
+						label='Measure'
 						rules={[{ required: true }]}
 					>
 						<Select
-							className='mesuare-select'
+							className='measure-select'
 							allowClear
 							style={{ width: '100%' }}
-							placeholder='Select mesuare'
+							placeholder='Select measure'
 						>
-							{mesuares.map((mesuare, index) => (
-								<Option key={index} value={mesuare.id}>
-									{mesuare.name}
+							{measures.map((measure, index) => (
+								<Option key={index} value={measure.id}>
+									{measure.name}
 								</Option>
 							))}
 						</Select>
