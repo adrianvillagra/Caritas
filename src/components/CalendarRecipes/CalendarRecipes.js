@@ -1,9 +1,22 @@
 import './CalendarRecipes.less';
 import React, { useEffect, useState } from 'react';
-import { Alert, Badge, Button, Calendar, Modal, Select } from 'antd';
+import {
+	Alert,
+	Badge,
+	Button,
+	Calendar,
+	Col,
+	Modal,
+	Row,
+	Select,
+	Input,
+} from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import CustomBreadcrum from '../Breadcrum/CustomBreadcrum';
 import CalendarService from '../../services/CalendarService';
 import RecipesService from '../../services/RecipesService';
+import Batch from '../Batch/Batch';
+import CustomBreadcrumb from '../Breadcrum/CustomBreadcrum';
 
 const CalendarRecipes = () => {
 	const [calendar, setCalendar] = useState([]);
@@ -12,6 +25,7 @@ const CalendarRecipes = () => {
 	const [loading, setLoading] = useState(false);
 	const [recipes, setRecipes] = useState([]);
 	const [recipeIdSelected, setRecipeIdSelected] = useState();
+	const [isBatchOpen, setIsBatchOpen] = useState(false);
 	const [isVisibleModal, setIsVisibleModal] = useState(false);
 	const [visibleAlert, setVisibleAlert] = useState(false);
 	const [messageAlert, setMessageAlert] = useState('');
@@ -22,6 +36,9 @@ const CalendarRecipes = () => {
 	const successAlertType = 'success';
 	const errorAlertType = 'error';
 	const defaultDateFormat = 'YYYY-MM-DD';
+	const routes = [{ path: '../', breadcrumbName: 'Home' }];
+	let lastBatchId = 1;
+	//gainsboro //antiquewhitem  lightblue thistle
 
 	const getListData = (value) => {
 		const recipeToRenderTemp = calendar.find(
@@ -33,6 +50,7 @@ const CalendarRecipes = () => {
 						type: 'success',
 						content: recipeToRenderTemp.name,
 						id: recipeToRenderTemp.date,
+						batch_id: recipeToRenderTemp.batch_id,
 					},
 			  ]
 			: [];
@@ -42,15 +60,33 @@ const CalendarRecipes = () => {
 
 	function dateCellRender(value) {
 		const listData = getListData(value);
-		return (
-			<ul className='events'>
-				{listData.map((item) => (
-					<li key={item.date}>
-						<Badge status={item.type} text={item.content} />
-					</li>
-				))}
-			</ul>
-		);
+		if (listData[0]) {
+			if (lastBatchId === listData[0].batch_id) {
+				return (
+					<div className='ul' style={{ backgroundColor: 'lightblue' }}>
+						<ul className='events'>
+							{listData.map((item) => (
+								<li key={item.date}>
+									<Badge status={item.type} text={item.content} />
+								</li>
+							))}
+						</ul>
+					</div>
+				);
+			} else {
+				return (
+					<div className='ul' style={{ backgroundColor: 'thistle' }}>
+						<ul className='events'>
+							{listData.map((item) => (
+								<li key={item.date}>
+									<Badge status={item.type} text={item.content} />
+								</li>
+							))}
+						</ul>
+					</div>
+				);
+			}
+		}
 	}
 
 	const getMonthData = (value) => {
@@ -76,6 +112,7 @@ const CalendarRecipes = () => {
 			.then((result) => {
 				if (typeof result != 'undefined') {
 					setCalendar(result);
+					lastBatchId = result[0].batch_id;
 					setTotalCount(result.totalCount);
 				}
 			})
@@ -162,6 +199,10 @@ const CalendarRecipes = () => {
 		setIsVisibleModal(false);
 	};
 
+	const handleCloseBatch = () => {
+		setIsBatchOpen(false);
+	};
+
 	useEffect(() => {
 		getCalendar();
 		getRecipes();
@@ -181,6 +222,24 @@ const CalendarRecipes = () => {
 					/>
 				</div>
 			)}
+			<Row justify='space-between'>
+				<Col>
+					<CustomBreadcrumb routes={routes} />
+				</Col>
+				<Col>
+					<Row gutter={22} style={{ marginTop: '6px' }}>
+						<Col style={{ paddingBlockEnd: '15px' }}>
+							<Button
+								type='primary'
+								onClick={() => setIsBatchOpen(true)}
+								icon={<PlusOutlined />}
+							>
+								Add new batch
+							</Button>
+						</Col>
+					</Row>
+				</Col>
+			</Row>
 			<Calendar
 				dateCellRender={dateCellRender}
 				monthCellRender={monthCellRender}
@@ -226,6 +285,7 @@ const CalendarRecipes = () => {
 					))}
 				</Select>
 			</Modal>
+			<Batch visible={isBatchOpen} onClose={handleCloseBatch} />
 		</div>
 	);
 };

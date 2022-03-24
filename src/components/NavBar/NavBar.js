@@ -1,8 +1,11 @@
 import {
-	AppstoreOutlined,
+	CalendarOutlined,
+	CarryOutOutlined,
 	HomeOutlined,
-	NotificationOutlined,
+	ReadOutlined,
 	WhatsAppOutlined,
+	ReconciliationOutlined,
+	ProfileOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 
@@ -24,23 +27,21 @@ const NavBar = () => {
 				<Menu.Item key='home' icon={<HomeOutlined />}>
 					<NavLink to='/'>Home</NavLink>
 				</Menu.Item>
-				<Menu.Item key='products' icon={<NotificationOutlined />}>
+				<Menu.Item key='products' icon={<ProfileOutlined />}>
 					<NavLink to='/products'>Products</NavLink>
 				</Menu.Item>
-				<Menu.Item key='recipes' icon={<NotificationOutlined />}>
+				<Menu.Item key='recipes' icon={<ReadOutlined />}>
 					<NavLink to='/recipes'>Recipes</NavLink>
 				</Menu.Item>
-				<Menu.Item key='stock' icon={<NotificationOutlined />}>
+				<Menu.Item key='stock' icon={<ReconciliationOutlined />}>
 					<NavLink to='/stock'>Stock</NavLink>
 				</Menu.Item>
-				<SubMenu key='subOrder' icon={<AppstoreOutlined />} title='Calendar'>
-					<Menu.Item key='calendar'>
-						<NavLink to='/calendar'>View Calendar</NavLink>
-					</Menu.Item>
-					<Menu.Item key='sofa-couches'>
-						<NavLink to='/calendar/recipe'>Add recipe</NavLink>
-					</Menu.Item>
-				</SubMenu>
+				<Menu.Item key='calendar' icon={<CalendarOutlined />}>
+					<NavLink to='/calendar'>Calendar</NavLink>
+				</Menu.Item>
+				<Menu.Item key='batch' icon={<CarryOutOutlined />}>
+					<NavLink to='/batch'>Batch</NavLink>
+				</Menu.Item>
 				<Menu.Item key='contact' icon={<WhatsAppOutlined />}>
 					<NavLink to='/contact'>Contact</NavLink>
 				</Menu.Item>

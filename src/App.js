@@ -9,6 +9,7 @@ import Product from './components/Product/Product';
 import RecipesList from './components/RecipesList/RecipesList';
 import Recipe from './components/Recipe/Recipe';
 import CalendarRecipes from './components/CalendarRecipes/CalendarRecipes';
+import BatchList from './components/CalendarRecipes/CalendarRecipes';
 
 function App() {
 	return (
@@ -48,6 +49,11 @@ function App() {
 					<Route exact path='/calendar'>
 						<MainLayout>
 							<CalendarRecipes />
+						</MainLayout>
+					</Route>
+					<Route exact path='/batch'>
+						<MainLayout>
+							<BatchList />
 						</MainLayout>
 					</Route>
 					<Route exact path='/order'>

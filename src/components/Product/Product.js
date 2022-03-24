@@ -33,7 +33,6 @@ const Product = ({ alert, onClose, visible, product }) => {
 	const [showModal, setShowModal] = useState(false);
 	// const { setError } = React.useContext(ErrorContext);
 	const [form] = Form.useForm();
-	const { id } = useParams();
 	const typesService = new TypesService();
 	const measuresService = new MeasuresService();
 	const productsService = new ProductsService();
@@ -79,7 +78,6 @@ const Product = ({ alert, onClose, visible, product }) => {
 	};
 
 	const setValuesProduct = () => {
-		console.log('product:', product);
 		setProductName(product.name);
 		form.setFieldsValue({
 			measure_id: product.measure_id,
