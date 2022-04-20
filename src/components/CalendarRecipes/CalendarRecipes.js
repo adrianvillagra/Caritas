@@ -38,7 +38,8 @@ const CalendarRecipes = () => {
 	const defaultDateFormat = 'YYYY-MM-DD';
 	const routes = [{ path: '../', breadcrumbName: 'Home' }];
 	let lastBatchId = 1;
-	//gainsboro //antiquewhitem  lightblue thistle
+	let previousBatchId = 1;
+	//gainsboro //==antiquewhitem  lightblue thistle
 
 	const getListData = (value) => {
 		const recipeToRenderTemp = calendar.find(
@@ -61,7 +62,9 @@ const CalendarRecipes = () => {
 	function dateCellRender(value) {
 		const listData = getListData(value);
 		if (listData[0]) {
-			if (lastBatchId === listData[0].batch_id) {
+			lastBatchId =
+				previousBatchId === listData[0].batch_id && listData[0].batch_id;
+			if (lastBatchId === previousBatchId) {
 				return (
 					<div className='ul' style={{ backgroundColor: 'lightblue' }}>
 						<ul className='events'>
@@ -74,6 +77,7 @@ const CalendarRecipes = () => {
 					</div>
 				);
 			} else {
+				previousBatchId = listData[0].batch_id;
 				return (
 					<div className='ul' style={{ backgroundColor: 'thistle' }}>
 						<ul className='events'>

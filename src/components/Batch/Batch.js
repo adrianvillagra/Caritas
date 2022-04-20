@@ -170,7 +170,7 @@ const Batch = ({ onClose, visible }) => {
 					</Form.Item>
 					<Form.Item
 						className='rangePicker_5'
-						name='rangePicker_5'
+						name='rangePicker_5c'
 						label='Select range'
 						style={{ marginBottom: '50px' }}
 					>

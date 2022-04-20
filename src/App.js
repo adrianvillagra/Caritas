@@ -9,7 +9,7 @@ import Product from './components/Product/Product';
 import RecipesList from './components/RecipesList/RecipesList';
 import Recipe from './components/Recipe/Recipe';
 import CalendarRecipes from './components/CalendarRecipes/CalendarRecipes';
-import BatchList from './components/CalendarRecipes/CalendarRecipes';
+import BatchList from './components/BatchList/BatchList';
 
 function App() {
 	return (
