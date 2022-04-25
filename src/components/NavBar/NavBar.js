@@ -1,4 +1,5 @@
 import {
+	AuditOutlined,
 	CalendarOutlined,
 	CarryOutOutlined,
 	HomeOutlined,
@@ -6,6 +7,7 @@ import {
 	WhatsAppOutlined,
 	ReconciliationOutlined,
 	ProfileOutlined,
+	ShopOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 
@@ -42,6 +44,14 @@ const NavBar = () => {
 				<Menu.Item key='batch' icon={<CarryOutOutlined />}>
 					<NavLink to='/batch'>Batch</NavLink>
 				</Menu.Item>
+				<Menu.Item key='commerces' icon={<ShopOutlined />}>
+					<NavLink to='/commerces'>Commerces</NavLink>
+				</Menu.Item>
+				<SubMenu key='subRendition' icon={<AuditOutlined />} title='Rendition'>
+					<Menu.Item key='sofa-couches'>
+						<NavLink to='/rendition/invoices'>Invoices</NavLink>
+					</Menu.Item>
+				</SubMenu>
 				<Menu.Item key='contact' icon={<WhatsAppOutlined />}>
 					<NavLink to='/contact'>Contact</NavLink>
 				</Menu.Item>

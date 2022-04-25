@@ -21,6 +21,7 @@ import CustomBreadcrumb from '../Breadcrum/CustomBreadcrum';
 const CalendarRecipes = () => {
 	const [calendar, setCalendar] = useState([]);
 	const [dateSelected, setDateSelected] = useState('');
+	// const [dataCount, setDataCount] = useState([{ recipe_id: 4, count: 5 }]);
 	const [totalCount, setTotalCount] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const [recipes, setRecipes] = useState([]);
@@ -37,8 +38,6 @@ const CalendarRecipes = () => {
 	const errorAlertType = 'error';
 	const defaultDateFormat = 'YYYY-MM-DD';
 	const routes = [{ path: '../', breadcrumbName: 'Home' }];
-	let lastBatchId = 1;
-	let previousBatchId = 1;
 	//gainsboro //==antiquewhitem  lightblue thistle
 
 	const getListData = (value) => {
@@ -56,41 +55,67 @@ const CalendarRecipes = () => {
 			  ]
 			: [];
 
-		return listData;
+		return listData || [];
 	};
 
 	function dateCellRender(value) {
 		const listData = getListData(value);
-		if (listData[0]) {
-			lastBatchId =
-				previousBatchId === listData[0].batch_id && listData[0].batch_id;
-			if (lastBatchId === previousBatchId) {
-				return (
-					<div className='ul' style={{ backgroundColor: 'lightblue' }}>
-						<ul className='events'>
-							{listData.map((item) => (
-								<li key={item.date}>
-									<Badge status={item.type} text={item.content} />
-								</li>
-							))}
-						</ul>
-					</div>
-				);
-			} else {
-				previousBatchId = listData[0].batch_id;
-				return (
-					<div className='ul' style={{ backgroundColor: 'thistle' }}>
-						<ul className='events'>
-							{listData.map((item) => (
-								<li key={item.date}>
-									<Badge status={item.type} text={item.content} />
-								</li>
-							))}
-						</ul>
-					</div>
-				);
-			}
-		}
+		// if (listData[0]) {
+		console.log('listData[0]:', listData[0]);
+		// console.log('listData[0].id:', listData[0].batch_id);
+		// const { count: countBatchDays } = counts.find(
+		// 	(item) => (item.batch_id = listData[0].batch_id)
+		// );
+		// console.log('countBatchDays:', countBatchDays);
+
+		// countDays += 1;
+		// let backgroundColor = '';
+		// if (countDays <= countBatchDays) {
+		// 	backgroundColor = 'lightblue';
+		// } else {
+		// 	backgroundColor = 'thistle';
+		// 	countDays = 0;
+		// }
+
+		return (
+			<div className='ul'>
+				<ul className='events'>
+					{listData.map((item) => (
+						<li key={item.id}>
+							<Badge status={item.type} text={item.content} />
+						</li>
+					))}
+				</ul>
+			</div>
+		);
+
+		// if (previousBatchId) {
+		// 	return (
+		// 		<div className='ul' style={{ backgroundColor: 'lightblue' }}>
+		// 			<ul className='events'>
+		// 				{listData.map((item) => (
+		// 					<li key={item.date}>
+		// 						<Badge status={item.type} text={item.content} />
+		// 					</li>
+		// 				))}
+		// 			</ul>
+		// 		</div>
+		// 	);
+		// } else {
+		// 	previousBatchId = listData[0].batch_id;
+		// 	return (
+		// 		<div className='ul' style={{ backgroundColor: 'thistle' }}>
+		// 			<ul className='events'>
+		// 				{listData.map((item) => (
+		// 					<li key={item.date}>
+		// 						<Badge status={item.type} text={item.content} />
+		// 					</li>
+		// 				))}
+		// 			</ul>
+		// 		</div>
+		// 	);
+		// }
+		// }
 	}
 
 	const getMonthData = (value) => {
@@ -115,8 +140,9 @@ const CalendarRecipes = () => {
 			.getAll()
 			.then((result) => {
 				if (typeof result != 'undefined') {
+					console.log(result);
 					setCalendar(result);
-					lastBatchId = result[0].batch_id;
+					// lastBatchId = result[0].batch_id;
 					setTotalCount(result.totalCount);
 				}
 			})

@@ -10,6 +10,8 @@ import RecipesList from './components/RecipesList/RecipesList';
 import Recipe from './components/Recipe/Recipe';
 import CalendarRecipes from './components/CalendarRecipes/CalendarRecipes';
 import BatchList from './components/BatchList/BatchList';
+import CommerceList from './components/CommerceList/CommerceList';
+import Commerce from './components/Commerce/Commerce';
 
 function App() {
 	return (
@@ -54,6 +56,21 @@ function App() {
 					<Route exact path='/batch'>
 						<MainLayout>
 							<BatchList />
+						</MainLayout>
+					</Route>
+					<Route exact path='/commerces'>
+						<MainLayout>
+							<CommerceList />
+						</MainLayout>
+					</Route>
+					<Route exact path='/commerce/'>
+						<MainLayout>
+							<Commerce />
+						</MainLayout>
+					</Route>
+					<Route exact path='/commerce/:id'>
+						<MainLayout>
+							<Commerce />
 						</MainLayout>
 					</Route>
 					<Route exact path='/order'>
